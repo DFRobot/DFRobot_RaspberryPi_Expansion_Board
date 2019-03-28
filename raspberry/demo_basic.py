@@ -6,7 +6,7 @@
   # Connect board with raspberryPi.
   # Run this demo.
   #
-  # All pwm channel will set frequency to 400HZ, duty to 50%
+  # All pwm channel will set frequency to 400HZ, duty to 50%, attention: PWM voltage depends on independent power supply
   # All adc channel value will print on terminal
   #
   # Copyright   [DFRobot](http://www.dfrobot.com), 2016
@@ -61,8 +61,8 @@ if __name__ == "__main__":
 
   board.set_pwm_enable()
   # board.set_pwm_disable()
-  board.set_pwm_frequency(400)
-  board.set_pwm_duty(board.ALL, 50.0)   # set all pwm channels duty
+  board.set_pwm_frequency(600)          # set frequency to 600HZ, Attention: PWM voltage depends on independent power supply
+  board.set_pwm_duty(board.ALL, 50.0)   # Set all pwm channels duty
 
   board.set_adc_enable()
   # board.set_adc_disable()

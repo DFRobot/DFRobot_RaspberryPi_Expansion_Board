@@ -66,6 +66,7 @@ class DFRobot_Expansion_Board:
 
   def __init__(self, addr):
     self._addr = addr
+    self._is_pwm_enable = False
 
   def begin(self):
     '''
@@ -81,6 +82,7 @@ class DFRobot_Expansion_Board:
         self.last_operate_status = self.STA_ERR_SOFT_VERSION
       else:
         self.set_pwm_disable()
+        self.set_pwm_duty(self.ALL, 0)
         self.set_adc_disable()
     return self.last_operate_status
 
@@ -108,22 +110,33 @@ class DFRobot_Expansion_Board:
       @brief    Set pwm enable
     '''
     self._write_bytes(self._REG_PWM_CONTROL, [0x01])
+    if self.last_operate_status == self.STA_OK:
+      self._is_pwm_enable = True
+    time.sleep(0.01)
 
   def set_pwm_disable(self):
     '''
       @brief    Set pwm disable
     '''
     self._write_bytes(self._REG_PWM_CONTROL, [0x00])
+    if self.last_operate_status == self.STA_OK:
+      self._is_pwm_enable = False
+    time.sleep(0.01)
 
   def set_pwm_frequency(self, freq):
     '''
       @brief    Set pwm frequency
-      @param freq: int    Frequenct to set, in range 1 - 1000
+      @param freq: int    Frequency to set, in range 1 - 1000
     '''
     if freq < 1 or freq > 1000:
       self.last_operate_status = self.STA_ERR_PARAMETER
       return
+    is_pwm_enable = self._is_pwm_enable
+    self.set_pwm_disable()
     self._write_bytes(self._REG_PWM_FREQ, [freq >> 8, freq & 0xff])
+    time.sleep(0.01)
+    if is_pwm_enable:
+      self.set_pwm_enable()
 
   def set_pwm_duty(self, chan, duty):
     '''
@@ -136,7 +149,7 @@ class DFRobot_Expansion_Board:
       return
     for i in self._parse_id(self._PWM_CHAN_COUNT, chan):
       self._write_bytes(self._REG_PWM_DUTY1 + (i - 1) * 2, [int(duty), int((duty * 10) % 10)])
-  
+
   def set_adc_enable(self):
     '''
       @brief    Set adc enable

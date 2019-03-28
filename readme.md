@@ -1,13 +1,13 @@
 # DFRobot IO expansion HAT for Pi 
 
 This RaspberryPi expansion board can communicate with RaspberryPi via I2C. <br>
-This lead 10 GPIOs, 1 SPI, 4 I2Cs and 1 uart. <br>
-This contains 4 ADC (12 bits) ports, value read from stm32 that on board. <br>
-DFRobot gravity series sensors interface compatible. <br>
+It has 10 GPIOs, 1 SPI, 4 I2Cs and 1 uart. <br>
+And it contains 4 ADC (12 bits) ports, ADC values can be read from on board stm32. <br>
+Compatible with gravity interfaces developed by DFRobot. <br>
 
 ## DFRobot DC Motor Driver HAT Library for RaspberryPi
 
-Provide a Raspberry Pi library for the DFRobot IO expansion HAT modules.
+To provide a Raspberry Pi library for DFRobot IO expansion HAT modules.
 
 ## Table of Contents
 
@@ -20,17 +20,17 @@ Provide a Raspberry Pi library for the DFRobot IO expansion HAT modules.
 
 ## Summary
 
-DC Motors driver.
+Io expansion hat.
 
 ## Feature
 
-1. 12 bits ADC value read <br>
-2. PWM frequency set. <br>
-3. PWM duty set. <br>
+1. Read 12 bits ADC value.<br>
+2. Set PWM frequency.<br>
+3. Set PWM duty.<br>
 
 ## Installation
 
-This Sensor should work with DFRobot_Raspberry_Extension_Board on RaspberryPi. <br>
+This sensor should work with DFRobot_Raspberry_Extension_Board on RaspberryPi. <br>
 Run the program:
 
 ```
@@ -50,7 +50,7 @@ class DFRobot_Extension_Board:
   STA_ERR_SOFT_VERSION = 0x03
   STA_ERR_PARAMETER = 0x04
 
-  ''' last operate status, users can use this variable to determine the result of a function call. '''
+  ''' The last operate status, users can use this variable to determine the result of a function call. '''
   last_operate_status = STA_OK
 
   ''' Global variables '''
@@ -64,53 +64,53 @@ class DFRobot_Extension_Board:
 
   def set_addr(self, addr):
     '''
-      @brief    Set board controler address, reboot module to make it effective
-      @param address: int    Address to set, range in 1 to 127
+      @brief    Set board controller address, reboot module to make it effective.
+      @param address: int    Address to set, range from 1 to 127.
     '''
 
   def set_pwm_enable(self):
     '''
-      @brief    Set pwm enable
+      @brief    Enable pwm 
     '''
 
   def set_pwm_disable(self):
     '''
-      @brief    Set pwm disable
+      @brief    Disable pwm 
     '''
 
   def set_pwm_frequency(self, freq):
     '''
       @brief    Set pwm frequency
-      @param freq: int    Frequenct to set, in range 1 - 1000
+      @param freq: int    Frequency to set, in range 1 - 1000
     '''
 
   def set_pwm_duty(self, chan, duty):
     '''
-      @brief    Set selected channel duty
-      @param chan: list     One or more channels to set, items in range 1 to 4, or chan = self.ALL
+      @brief    Set selected channel duty, Attention: PWM voltage depends on independent power supply
+      @param chan: list     One or more channels to set, items range from 1 to 4, or chan = self.ALL
       @param duty: float    Duty to set, in range 0.0 to 99.0
     '''
   
   def set_adc_enable(self):
     '''
-      @brief    Set adc enable
+      @brief   Enable adc 
     '''
 
   def set_adc_disable(self):
     '''
-      @brief    Set adc disable
+      @brief    Disable adc 
     '''
 
   def get_adc_value(self, chan):
     '''
       @brief    Get adc value
-      @param chan: int    Channel to get, in range 1 to 4, or self.ALL
+      @param chan: int    One or more channels to set, items range from 1 to 4, or chan = self.ALL
       @return :list       List of value
     '''
 
   def detecte(self):
     '''
-      @brief    If you forget address you had set, use this to detecte them, must have class instance
+      @brief    If you forget address that set before, please donot forget class instance when detecting.
       @return   Board list conformed
     '''
 
