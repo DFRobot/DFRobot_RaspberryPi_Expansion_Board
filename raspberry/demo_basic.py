@@ -72,7 +72,7 @@ if __name__ == "__main__":
     print("adc values, 0 - 3.3v, 12bits, max = 4096")
     chan = 0
     for i in val:
-      print("channel: %d, value: %d" %(chan, i))
+      print("channel: %d, value: %d, valtage: %.2fV" %(chan, i, float(i) / 4096.0 * 3.3))
       chan += 1
     print("")
     time.sleep(2)
