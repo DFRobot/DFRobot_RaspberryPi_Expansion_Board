@@ -188,7 +188,7 @@ class DFRobot_Expansion_Board_IIC(DFRobot_Expansion_Board):
       @oaram addr: int     Board controler address
     '''
     self._bus = smbus.SMBus(bus_id)
-    DFRobot_Extension_Board.__init__(self, addr)
+    DFRobot_Expansion_Board.__init__(self, addr)
 
   def _write_bytes(self, reg, buf):
     self.last_operate_status = self.STA_ERR_DEVICE_NOT_DETECTED
