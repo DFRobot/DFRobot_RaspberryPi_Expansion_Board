@@ -6,7 +6,7 @@
   # Connect board with raspberryPi.
   # Run this demo.
   #
-  # All pwm channel will set frequency to 400HZ, duty to 50%, attention: PWM voltage depends on independent power supply
+  # All pwm channel will set frequency to 1000HZ, duty to 50%, attention: PWM voltage depends on independent power supply
   # All adc channel value will print on terminal
   #
   # Copyright   [DFRobot](http://www.dfrobot.com), 2016
@@ -20,7 +20,7 @@ import time
 
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_IIC as Board
 
-board = Board(1, 0x10)    # Select bus 1, set address to 0x10
+board = Board(1, 0x10)    # Select i2c bus 1, set address to 0x10
 
 def board_detect():
   l = board.detecte()
@@ -59,20 +59,21 @@ if __name__ == "__main__":
     time.sleep(2)
   print("board begin success")
 
-  board.set_pwm_enable()
+  board.set_pwm_enable()                # Pwm channel need external power
   # board.set_pwm_disable()
-  board.set_pwm_frequency(600)          # set frequency to 600HZ, Attention: PWM voltage depends on independent power supply
+  board.set_pwm_frequency(1000)         # set frequency to 1000HZ, Attention: PWM voltage depends on independent power supply
   board.set_pwm_duty(board.ALL, 50.0)   # Set all pwm channels duty
+  # board.set_pwm_duty([board.CHANNEL1, board.CHANNEL2], 50.0)    # Use list to set channels duty that selected
 
   board.set_adc_enable()
   # board.set_adc_disable()
 
   while True:
-    val = board.get_adc_value(board.ALL)
+    val_list = board.get_adc_value(board.ALL)    # return a list contains adc values
     print("adc values, 0 - 3.3v, 12bits, max = 4096")
     chan = 0
-    for i in val:
-      print("channel: %d, value: %d, valtage: %.2fV" %(chan, i, float(i) / 4096.0 * 3.3))
+    for val in val_list:
+      print("channel: %d, value: %d, valtage: %.2fV" %(chan, val, float(val) / 4096.0 * 3.3))
       chan += 1
     print("")
     time.sleep(2)

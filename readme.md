@@ -15,7 +15,6 @@ To provide a Raspberry Pi library for DFRobot IO expansion HAT modules.
 * [Feature](#feature)
 * [Installation](#installation)
 * [Methods](#methods)
-* [Compatibility](#compatibility)
 * [Credits](#credits)
 
 ## Summary
@@ -24,9 +23,11 @@ Io expansion hat.
 
 ## Feature
 
-1. Read 12 bits ADC value.<br>
-2. Set PWM frequency.<br>
-3. Set PWM duty.<br>
+1. Read 12 bits ADC value. <br>
+2. Set PWM frequency. <br>
+3. Set PWM duty. <br>
+4. Drive digital RGB LED. <br>
+5. Drive 180 degree servo. <br>
 
 ## Installation
 
@@ -41,7 +42,13 @@ $> python2 demo_basic.py
 
 ```py
 
-class DFRobot_Extension_Board:
+class DFRobot_Expansion_Board:
+
+  ''' Enum board channels '''
+  CHANNEL1 = 0x01
+  CHANNEL2 = 0x02
+  CHANNEL3 = 0x03
+  CHANNEL4 = 0x04
 
   ''' Board status '''
   STA_OK = 0x00
@@ -50,7 +57,7 @@ class DFRobot_Extension_Board:
   STA_ERR_SOFT_VERSION = 0x03
   STA_ERR_PARAMETER = 0x04
 
-  ''' The last operate status, users can use this variable to determine the result of a function call. '''
+  ''' last operate status, users can use this variable to determine the result of a function call. '''
   last_operate_status = STA_OK
 
   ''' Global variables '''
@@ -64,18 +71,18 @@ class DFRobot_Extension_Board:
 
   def set_addr(self, addr):
     '''
-      @brief    Set board controller address, reboot module to make it effective.
-      @param address: int    Address to set, range from 1 to 127.
+      @brief    Set board controler address, reboot module to make it effective
+      @param address: int    Address to set, range in 1 to 127
     '''
 
   def set_pwm_enable(self):
     '''
-      @brief    Enable pwm 
+      @brief    Set pwm enable, pwm channel need external power
     '''
 
   def set_pwm_disable(self):
     '''
-      @brief    Disable pwm 
+      @brief    Set pwm disable
     '''
 
   def set_pwm_frequency(self, freq):
@@ -86,35 +93,91 @@ class DFRobot_Extension_Board:
 
   def set_pwm_duty(self, chan, duty):
     '''
-      @brief    Set selected channel duty, Attention: PWM voltage depends on independent power supply
-      @param chan: list     One or more channels to set, items range from 1 to 4, or chan = self.ALL
-      @param duty: float    Duty to set, in range 0.0 to 99.0
+      @brief    Set selected channel duty
+      @param chan: list     One or more channels to set, items in range 1 to 4, or chan = self.ALL
+      @param duty: float    Duty to set, in range 0.0 to 100.0
     '''
-  
+
   def set_adc_enable(self):
     '''
-      @brief   Enable adc 
+      @brief    Set adc enable
     '''
 
   def set_adc_disable(self):
     '''
-      @brief    Disable adc 
+      @brief    Set adc disable
     '''
 
   def get_adc_value(self, chan):
     '''
       @brief    Get adc value
-      @param chan: int    One or more channels to set, items range from 1 to 4, or chan = self.ALL
+      @param chan: int    Channel to get, in range 1 to 4, or self.ALL
       @return :list       List of value
     '''
 
   def detecte(self):
     '''
-      @brief    If you forget address that set before, please donot forget class instance when detecting.
+      @brief    If you forget address you had set, use this to detecte them, must have class instance
       @return   Board list conformed
     '''
 
-class DFRobot_Extension_Board_IIC(DFRobot_Extension_Board):
+class DFRobot_Epansion_Board_Digital_RGB_LED():
+
+  def __init__(self, board):
+    '''
+      @param board: DFRobot_Expansion_Board   Board instance to operate digital rgb led, test LED: https://www.dfrobot.com/product-1829.html
+                                              Warning: LED must connect to pwm channel, otherwise may destory Pi IO
+    '''
+
+  def begin(self, chan_r, chan_g, chan_b):
+    '''
+      @brief    Set digital rgb led color channel, these parameters not repeat
+      @param chan_r: int    Set color red channel id, in range 1 to 4
+      @param chan_g: int    Set color green channel id, in range 1 to 4
+      @param chan_b: int    Set color blue channel id, in range 1 to 4
+    '''
+
+  def color888(self, r, g, b):
+    '''
+      @brief    Set LED to true-color
+      @param r: int   Color components red
+      @param g: int   Color components green
+      @param b: int   Color components blue
+    '''
+
+  def color24(self, color):
+    '''
+      @brief    Set LED to 24-bits color
+      @param color: int   24-bits color
+    '''
+
+  def color565(self, color):
+    '''
+      @brief    Set LED to 16-bits color
+      @param color: int   16-bits color
+    '''
+
+class DFRobot_Expansion_Board_Servo():
+
+  def __init__(self, board):
+    '''
+      @param board: DFRobot_Expansion_Board   Board instance to operate servo, test servo: https://www.dfrobot.com/product-255.html
+                                              Warning: servo must connect to pwm channel, otherwise may destory Pi IO
+    '''
+
+  def begin(self):
+    '''
+      @brief    Board servo begin
+    '''
+
+  def move(self, id, angle):
+    '''
+      @brief    Servos move
+      @param id: list     One or more servos to set, items in range 1 to 4, or chan = self.ALL
+      @param angle: int   Angle to move, in range 0 to 180
+    '''
+
+class DFRobot_Expansion_Board_IIC(DFRobot_Expansion_Board):
 
   def __init__(self, bus_id, addr):
     '''

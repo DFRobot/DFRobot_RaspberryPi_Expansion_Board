@@ -22,10 +22,10 @@
 
 import time
 
-class DFRobot_Expansion_Board:
+_PWM_CHAN_COUNT = 4
+_ADC_CHAN_COUNT = 4
 
-  _PWM_CHAN_COUNT = 4
-  _ADC_CHAN_COUNT = 4
+class DFRobot_Expansion_Board:
 
   _REG_SLAVE_ADDR = 0x00
   _REG_PID = 0x01
@@ -44,6 +44,12 @@ class DFRobot_Expansion_Board:
 
   _REG_DEF_PID = 0xdf
   _REG_DEF_VID = 0x01
+
+  ''' Enum board channels '''
+  CHANNEL1 = 0x01
+  CHANNEL2 = 0x02
+  CHANNEL3 = 0x03
+  CHANNEL4 = 0x04
 
   ''' Board status '''
   STA_OK = 0x00
@@ -107,7 +113,7 @@ class DFRobot_Expansion_Board:
 
   def set_pwm_enable(self):
     '''
-      @brief    Set pwm enable
+      @brief    Set pwm enable, pwm channel need external power
     '''
     self._write_bytes(self._REG_PWM_CONTROL, [0x01])
     if self.last_operate_status == self.STA_OK:
@@ -142,12 +148,12 @@ class DFRobot_Expansion_Board:
     '''
       @brief    Set selected channel duty
       @param chan: list     One or more channels to set, items in range 1 to 4, or chan = self.ALL
-      @param duty: float    Duty to set, in range 0.0 to 99.0
+      @param duty: float    Duty to set, in range 0.0 to 100.0
     '''
-    if duty < 0 or duty > 99:
+    if duty < 0 or duty > 100:
       self.last_operate_status = self.STA_ERR_PARAMETER
       return
-    for i in self._parse_id(self._PWM_CHAN_COUNT, chan):
+    for i in self._parse_id(_PWM_CHAN_COUNT, chan):
       self._write_bytes(self._REG_PWM_DUTY1 + (i - 1) * 2, [int(duty), int((duty * 10) % 10)])
 
   def set_adc_enable(self):
@@ -169,7 +175,7 @@ class DFRobot_Expansion_Board:
       @return :list       List of value
     '''
     l = []
-    for i in self._parse_id(self._ADC_CHAN_COUNT, chan):
+    for i in self._parse_id(_ADC_CHAN_COUNT, chan):
       rslt = self._read_bytes(self._REG_ADC_VAL1 + (i - 1) * 2, 2)
       l.append((rslt[0] << 8) | rslt[1])
     return l
@@ -190,6 +196,88 @@ class DFRobot_Expansion_Board:
     self._addr = back
     self.last_operate_status = self.STA_OK
     return l
+
+class DFRobot_Epansion_Board_Digital_RGB_LED():
+
+  def __init__(self, board):
+    '''
+      @param board: DFRobot_Expansion_Board   Board instance to operate digital rgb led, test LED: https://www.dfrobot.com/product-1829.html
+                                              Warning: LED must connect to pwm channel, otherwise may destory Pi IO
+    '''
+    self._board = board
+    self._chan_r = 0
+    self._chan_g = 0
+    self._chan_b = 0
+
+  def begin(self, chan_r, chan_g, chan_b):
+    '''
+      @brief    Set digital rgb led color channel, these parameters not repeat
+      @param chan_r: int    Set color red channel id, in range 1 to 4
+      @param chan_g: int    Set color green channel id, in range 1 to 4
+      @param chan_b: int    Set color blue channel id, in range 1 to 4
+    '''
+    if chan_r == chan_g or chan_r == chan_b or chan_g == chan_b:
+      return
+    if 0 < chan_r < _PWM_CHAN_COUNT and 0 < chan_g < _PWM_CHAN_COUNT and 0 < chan_b < _PWM_CHAN_COUNT:
+      self._chan_r = chan_r
+      self._chan_g = chan_g
+      self._chan_b = chan_b
+      self._board.set_pwm_enable()
+      self._board.set_pwm_frequency(1000)
+      self._board.set_pwm_duty(self._board.ALL, 100)
+
+  def color888(self, r, g, b):
+    '''
+      @brief    Set LED to true-color
+      @param r: int   Color components red
+      @param g: int   Color components green
+      @param b: int   Color components blue
+    '''
+    self._board.set_pwm_duty([self._chan_r], 100 - (r & 0xff) * 100 // 255)
+    self._board.set_pwm_duty([self._chan_g], 100 - (g & 0xff) * 100 // 255)
+    self._board.set_pwm_duty([self._chan_b], 100 - (b & 0xff) * 100 // 255)
+
+  def color24(self, color):
+    '''
+      @brief    Set LED to 24-bits color
+      @param color: int   24-bits color
+    '''
+    color &= 0xffffff
+    self.color888(color >> 16, (color >> 8) & 0xff, color & 0xff)
+
+  def color565(self, color):
+    '''
+      @brief    Set LED to 16-bits color
+      @param color: int   16-bits color
+    '''
+    color &= 0xffff
+    self.color888((color & 0xf800) >> 8, (color & 0x7e0) >> 3, (color & 0x1f) << 3)
+
+class DFRobot_Expansion_Board_Servo():
+
+  def __init__(self, board):
+    '''
+      @param board: DFRobot_Expansion_Board   Board instance to operate servo, test servo: https://www.dfrobot.com/product-255.html
+                                              Warning: servo must connect to pwm channel, otherwise may destory Pi IO
+    '''
+    self._board = board
+
+  def begin(self):
+    '''
+      @brief    Board servo begin
+    '''
+    self._board.set_pwm_enable()
+    self._board.set_pwm_frequency(50)
+    self._board.set_pwm_duty(self._board.ALL, 0)
+
+  def move(self, id, angle):
+    '''
+      @brief    Servos move
+      @param id: list     One or more servos to set, items in range 1 to 4, or chan = self.ALL
+      @param angle: int   Angle to move, in range 0 to 180
+    '''
+    if 0 <= angle <= 180:
+      self._board.set_pwm_duty(id, (0.5 + (float(angle) / 90.0)) / 20 * 100)
 
 import smbus
 
