@@ -1,13 +1,13 @@
 # -*- coding:utf-8 -*-
 
 '''
-  # demo_basic.py
+  # demo_pwm.py
   #
   # Connect board with raspberryPi.
   # Run this demo.
   #
   # All pwm channel will set frequency to 1000HZ, duty to 50%, attention: PWM voltage depends on independent power supply
-  # All adc channel value will print on terminal
+  # If there is DC motors connect to pwm channle, they will move slow to fast, then loop
   #
   # Copyright   [DFRobot](http://www.dfrobot.com), 2016
   # Copyright   GNU Lesser General Public License
@@ -61,19 +61,15 @@ if __name__ == "__main__":
 
   board.set_pwm_enable()                # Pwm channel need external power
   # board.set_pwm_disable()
-  board.set_pwm_frequency(1000)         # set frequency to 1000HZ, Attention: PWM voltage depends on independent power supply
-  board.set_pwm_duty(board.ALL, 50.0)   # Set all pwm channels duty
-  # board.set_pwm_duty([board.CHANNEL1, board.CHANNEL2], 50.0)    # Use list to set channels duty that selected
-
-  board.set_adc_enable()
-  # board.set_adc_disable()
+  board.set_pwm_frequency(1000)         # Set frequency to 1000HZ, Attention: PWM voltage depends on independent power supply
 
   while True:
-    val_list = board.get_adc_value(board.ALL)    # return a list contains adc values
-    print("adc values, 0 - 3.3v, 12bits, max = 4096")
-    chan = 0
-    for val in val_list:
-      print("channel: %d, value: %d, valtage: %.2fV" %(chan, val, float(val) / 4096.0 * 3.3))
-      chan += 1
-    print("")
-    time.sleep(2)
+    print("set all pwm channels duty to 30%")
+    board.set_pwm_duty(board.ALL, 30)   # Set all pwm channels duty
+    time.sleep(1)
+
+    print("set part pwm channels duty to 60%")
+    chan_list = [board.CHANNEL1, board.CHANNEL2]
+    # chan_list = [1, 2]
+    board.set_pwm_duty(chan_list, 60)   # Set part pwm channels duty
+    time.sleep(1)

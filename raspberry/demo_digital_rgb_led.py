@@ -7,7 +7,7 @@
   # Run this demo.
   #
   # Connect LED pin r to pwm channel 2, pin g to pwm channel 1, pin b to pwm channel 3
-  # LED will loop change to red, then green, then blue.
+  # LED will change to red, then green, then blue, then loop
   # Test LED: https://www.dfrobot.com/product-1829.html
   # Warning: LED must connect to pwm channel, otherwise may destory Pi IO
   #

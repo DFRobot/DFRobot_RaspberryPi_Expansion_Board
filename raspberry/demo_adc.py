@@ -1,15 +1,12 @@
 # -*- coding:utf-8 -*-
 
 '''
-  # demo_servo.py
+  # demo_adc.py
   #
   # Connect board with raspberryPi.
   # Run this demo.
   #
-  # Connect servo to one of pwm channels
-  # All or part servos will move to 0 degree, then move to 180 degree, then loop
-  # Test Servo: https://www.dfrobot.com/product-255.html
-  # Warning: Servos must connect to pwm channel, otherwise may destory Pi IO
+  # All or part adc channels value will print on terminal
   #
   # Copyright   [DFRobot](http://www.dfrobot.com), 2016
   # Copyright   GNU Lesser General Public License
@@ -21,10 +18,13 @@
 import time
 
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_IIC as Board
-from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_Servo as Servo
 
 board = Board(1, 0x10)    # Select i2c bus 1, set address to 0x10
-servo = Servo(board)
+
+def board_detect():
+  l = board.detecte()
+  print("Board list conform:")
+  print(l)
 
 ''' print last operate status, users can use this variable to determine the result of a function call. '''
 def print_board_status():
@@ -41,27 +41,42 @@ def print_board_status():
 
 if __name__ == "__main__":
 
+  board_detect()    # If you forget address you had set, use this to detected them, must have class instance
+
+  # Set board controler address, use it carefully, reboot module to make it effective
+  '''
+  board.set_addr(0x10)
+  if board.last_operate_status != board.STA_OK:
+    print("set board address faild")
+  else:
+    print("set board address success")
+  '''
+
   while board.begin() != board.STA_OK:    # Board begin and check board status
     print_board_status()
     print("board begin faild")
     time.sleep(2)
   print("board begin success")
 
-  servo.begin()   # servo control begin
+  board.set_adc_enable()
+  # board.set_adc_disable()
 
   while True:
-    print("servo move to 0")
-    servo.move(board.ALL, 0)
-    time.sleep(1)
-    print("servo move to 180")
-    servo.move(board.ALL, 180)
-    time.sleep(1)
-
-    chan_list = [board.CHANNEL1, board.CHANNEL2]
+    val_list = board.get_adc_value(board.ALL)    # All channels read, return a list contains adc values
+    print("adc values, 0 - 3.3v, 12bits, max = 4096")
+    print("all channels read:")
+    chan = 1
+    for val in val_list:
+      print("channel: %d, value: %d, valtage: %.2fV" %(chan, val, float(val) / 4096.0 * 3.3))
+      chan += 1
+    print("")
+    
+    chan_list = [board.CHANNEL1, board.CHANNEL2]    # channel list declare
     # chan_list = [1, 2]
-    print("part servos move to 0")
-    servo.move(chan_list, 0)
-    time.sleep(1)
-    print("part servos move to 180")
-    servo.move(chan_list, 180)
-    time.sleep(1)
+    val_list = board.get_adc_value(chan_list)   # Part channels raed
+    print("part channels read:")
+    for chan, val in zip(chan_list, val_list):
+      print("channel: %d, value: %d, valtage: %.2fV" %(chan, val, float(val) / 4096.0 * 3.3))
+    print("")
+
+    time.sleep(2)
