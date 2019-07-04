@@ -43,7 +43,7 @@ class DFRobot_Expansion_Board:
   _REG_ADC_VAL4 = 0x15
 
   _REG_DEF_PID = 0xdf
-  _REG_DEF_VID = 0x01
+  _REG_DEF_VID = 0x10
 
   ''' Enum board channels '''
   CHANNEL1 = 0x01
