@@ -57,11 +57,15 @@ if __name__ == "__main__":
     servo.move(board.ALL, 180)
     time.sleep(1)
 
-    chan_list = [board.CHANNEL1, board.CHANNEL2]
-    # chan_list = [1, 2]
     print("part servos move to 0")
-    servo.move(chan_list, 0)
+    servo.move(0, 0)  #pwm0
+    #servo.move(1, 0)  #pwm1
+    #servo.move(2, 0)  #pwm2
+    #servo.move(3, 0)  #pwm3
     time.sleep(1)
     print("part servos move to 180")
-    servo.move(chan_list, 180)
+    servo.move(0, 180)  #pwm0
+    #servo.move(1, 180)  #pwm1
+    #servo.move(2, 180)  #pwm2
+    #servo.move(3, 180)  #pwm3
     time.sleep(1)

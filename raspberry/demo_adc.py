@@ -62,21 +62,13 @@ if __name__ == "__main__":
   # board.set_adc_disable()
 
   while True:
-    val_list = board.get_adc_value(board.ALL)    # All channels read, return a list contains adc values
-    print("adc values, 0 - 3.3v, 12bits, max = 4096")
-    print("all channels read:")
-    chan = 1
-    for val in val_list:
-      print("channel: %d, value: %d, valtage: %.2fV" %(chan, val, float(val) / 4096.0 * 3.3))
-      chan += 1
-    print("")
-    
-    chan_list = [board.CHANNEL1, board.CHANNEL2]    # channel list declare
-    # chan_list = [1, 2]
-    val_list = board.get_adc_value(chan_list)   # Part channels raed
+    val_list = board.get_adc_value(board.A0)   # A0 channels read
+    #val_list = board.get_adc_value(board.A1)   # A1 channels read
+    #val_list = board.get_adc_value(board.A2)   # A2 channels read
+    #val_list = board.get_adc_value(board.A3)   # A3 channels read
     print("part channels read:")
-    for chan, val in zip(chan_list, val_list):
-      print("channel: %d, value: %d, valtage: %.2fV" %(chan, val, float(val) / 4096.0 * 3.3))
+    for val in val_list:
+      print("channel: A0, value: %d" %val)
     print("")
 
     time.sleep(2)

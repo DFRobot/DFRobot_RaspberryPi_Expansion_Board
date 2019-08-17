@@ -44,12 +44,12 @@ class DFRobot_Expansion_Board:
 
   _REG_DEF_PID = 0xdf
   _REG_DEF_VID = 0x10
-
-  ''' Enum board channels '''
-  CHANNEL1 = 0x01
-  CHANNEL2 = 0x02
-  CHANNEL3 = 0x03
-  CHANNEL4 = 0x04
+  
+  ''' Enum board Analog channels '''
+  A0 = 0x00
+  A1 = 0x01
+  A2 = 0x02
+  A3 = 0x03
 
   ''' Board status '''
   STA_OK = 0x00
@@ -103,13 +103,19 @@ class DFRobot_Expansion_Board:
     self._write_bytes(self._REG_SLAVE_ADDR, [addr])
 
   def _parse_id(self, limit, id):
-    if id == self.ALL:
+    ld = []
+    if isinstance(id, list) == False:
+      id = id + 1
+      ld.append(id)
+    else:
+      ld = [i + 1 for i in id]
+    if ld == self.ALL:
       return range(1, limit + 1)
-    for i in id:
+    for i in ld:
       if i < 1 or i > limit:
         self.last_operate_status = self.STA_ERR_PARAMETER
         return []
-    return id
+    return ld
 
   def set_pwm_enable(self):
     '''
@@ -218,7 +224,7 @@ class DFRobot_Epansion_Board_Digital_RGB_LED():
     '''
     if chan_r == chan_g or chan_r == chan_b or chan_g == chan_b:
       return
-    if 0 < chan_r < _PWM_CHAN_COUNT and 0 < chan_g < _PWM_CHAN_COUNT and 0 < chan_b < _PWM_CHAN_COUNT:
+    if chan_r < _PWM_CHAN_COUNT and chan_g < _PWM_CHAN_COUNT and chan_b < _PWM_CHAN_COUNT:
       self._chan_r = chan_r
       self._chan_g = chan_g
       self._chan_b = chan_b

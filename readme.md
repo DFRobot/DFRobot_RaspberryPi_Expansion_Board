@@ -44,11 +44,11 @@ $> python2 demo_basic.py
 
 class DFRobot_Expansion_Board:
 
-  ''' Enum board channels '''
-  CHANNEL1 = 0x01
-  CHANNEL2 = 0x02
-  CHANNEL3 = 0x03
-  CHANNEL4 = 0x04
+  ''' Enum board Analog channels '''
+  A0 = 0x00
+  A1 = 0x01
+  A2 = 0x02
+  A3 = 0x03
 
   ''' Board status '''
   STA_OK = 0x00

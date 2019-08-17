@@ -69,7 +69,8 @@ if __name__ == "__main__":
     time.sleep(1)
 
     print("set part pwm channels duty to 60%")
-    chan_list = [board.CHANNEL1, board.CHANNEL2]
-    # chan_list = [1, 2]
-    board.set_pwm_duty(chan_list, 60)   # Set part pwm channels duty
+    board.set_pwm_duty(0, 60)   # Set pwm0 channels duty
+    #board.set_pwm_duty(1, 70)  # Set pwm1 channels duty
+    #board.set_pwm_duty(2, 80)  # Set pwm2 channels duty
+    #board.set_pwm_duty(3, 90)  # Set pwm3 channels duty
     time.sleep(1)

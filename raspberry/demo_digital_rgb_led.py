@@ -48,7 +48,7 @@ if __name__ == "__main__":
   print("board begin success")
 
   ''' Set color components channel and led begin '''
-  led.begin(board.CHANNEL2, board.CHANNEL1, board.CHANNEL3)
+  led.begin(1, 0, 2) #pwm1/pwm0/pwm2
 
   while True:
     print("set color to red")
