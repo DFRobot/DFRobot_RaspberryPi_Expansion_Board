@@ -180,11 +180,9 @@ class DFRobot_Expansion_Board:
       @param chan: int    Channel to get, in range 1 to 4, or self.ALL
       @return :list       List of value
     '''
-    l = []
     for i in self._parse_id(_ADC_CHAN_COUNT, chan):
       rslt = self._read_bytes(self._REG_ADC_VAL1 + (i - 1) * 2, 2)
-      l.append((rslt[0] << 8) | rslt[1])
-    return l
+    return ((rslt[0] << 8) | rslt[1])
 
   def detecte(self):
     '''
