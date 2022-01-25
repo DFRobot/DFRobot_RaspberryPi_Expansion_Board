@@ -1,22 +1,23 @@
 # -*- coding:utf-8 -*-
 
-'''
-  # demo_pwm.py
-  #
-  # Connect board with raspberryPi.
-  # Run this demo.
-  #
-  # All pwm channel will set frequency to 1000HZ, duty to 50%, attention: PWM voltage depends on independent power supply
-  # If there is DC motors connect to pwm channle, they will move slow to fast, then loop
-  #
-  # Copyright   [DFRobot](http://www.dfrobot.com), 2016
-  # Copyright   GNU Lesser General Public License
-  #
-  # version  V1.0
-  # date  2019-3-28
+'''!
+  @file demo_pwm.py
+  @brief Connect board with raspberryPi. Run this demo. All pwm channel will set frequency to 1000HZ, duty to 50%, attention: PWM voltage depends 
+  @n on independent power supply. If there is DC motors connect to pwm channle, they will move slow to fast, then loop.
+  @n
+  @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+  @license     The MIT License (MIT)
+  @author      Frank(jiehan.guo@dfrobot.com)
+  @version     V1.0
+  @date        2019-3-28
+  @url https://github.com/DFRobot/DFRobot_RaspberryPi_Expansion_Board
 '''
 
+import sys
+import os
 import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_IIC as Board
 

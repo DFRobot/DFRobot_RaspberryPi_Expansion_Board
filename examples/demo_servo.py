@@ -1,24 +1,25 @@
 # -*- coding:utf-8 -*-
 
-'''
-  # demo_servo.py
-  #
-  # Connect board with raspberryPi.
-  # Run this demo.
-  #
-  # Connect servo to one of pwm channels
-  # All or part servos will move to 0 degree, then move to 180 degree, then loop
-  # Test Servo: https://www.dfrobot.com/product-255.html
-  # Warning: Servos must connect to pwm channel, otherwise may destory Pi IO
-  #
-  # Copyright   [DFRobot](http://www.dfrobot.com), 2016
-  # Copyright   GNU Lesser General Public License
-  #
-  # version  V1.0
-  # date  2019-3-28
+'''!
+  @file demo_servo.py
+  @brief Connect servo to one of pwm channels. All or part servos will move to 0 degree, then move to 180 degree, then loop.
+  @n Test Servo: https://www.dfrobot.com/product-255.html
+  @note Warning: Servos must connect to pwm channel, otherwise may destory Pi IO
+  @n
+  @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+  @license     The MIT License (MIT)
+  @author      Frank(jiehan.guo@dfrobot.com)
+  @version     V1.0
+  @date        2019-3-28
+  @url https://github.com/DFRobot/DFRobot_RaspberryPi_Expansion_Board
 '''
 
+
+import sys
+import os
 import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_IIC as Board
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_Servo as Servo

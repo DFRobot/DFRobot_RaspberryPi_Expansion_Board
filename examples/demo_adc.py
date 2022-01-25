@@ -1,21 +1,21 @@
 # -*- coding:utf-8 -*-
 
-'''
-  # demo_adc.py
-  #
-  # Connect board with raspberryPi.
-  # Run this demo.
-  #
-  # All or part adc channels value will print on terminal
-  #
-  # Copyright   [DFRobot](http://www.dfrobot.com), 2016
-  # Copyright   GNU Lesser General Public License
-  #
-  # version  V1.0
-  # date  2019-3-28
+'''!
+  @file demo_adc.py
+  @brief Connect board with raspberryPi. Run this demo. All or part adc channels value will print on terminal
+  @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+  @license     The MIT License (MIT)
+  @author      Frank(jiehan.guo@dfrobot.com)
+  @version     V1.0
+  @date        2019-3-28
+  @url https://github.com/DFRobot/DFRobot_RaspberryPi_Expansion_Board
 '''
 
+import sys
+import os
 import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_IIC as Board
 

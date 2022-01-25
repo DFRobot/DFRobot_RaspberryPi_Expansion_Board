@@ -1,24 +1,24 @@
 # -*- coding:utf-8 -*-
 
-'''
-  # demo_digital_rgb_led.py
-  #
-  # Connect board with raspberryPi.
-  # Run this demo.
-  #
-  # Connect LED pin r to pwm channel 2, pin g to pwm channel 1, pin b to pwm channel 3
-  # LED will change to red, then green, then blue, then loop
-  # Test LED: https://www.dfrobot.com/product-1829.html
-  # Warning: LED must connect to pwm channel, otherwise may destory Pi IO
-  #
-  # Copyright   [DFRobot](http://www.dfrobot.com), 2016
-  # Copyright   GNU Lesser General Public License
-  #
-  # version  V1.0
-  # date  2019-3-28
+'''!
+  @file demo_digital_rgb_led.py
+  @brief Connect board with raspberryPi. Run this demo. Connect LED pin r to pwm channel 2, pin g to pwm channel 1, pin b to pwm channel 3
+  @n LED will change to red, then green, then blue, then loop Test LED: https://www.dfrobot.com/product-1829.html
+  @note Warning: LED must connect to pwm channel, otherwise may destory Pi IO
+  @n
+  @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+  @license     The MIT License (MIT)
+  @author      Frank(jiehan.guo@dfrobot.com)
+  @version     V1.0
+  @date        2019-3-28
+  @url https://github.com/DFRobot/DFRobot_RaspberryPi_Expansion_Board
 '''
 
+import sys
+import os
 import time
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Expansion_Board_IIC as Board
 from DFRobot_RaspberryPi_Expansion_Board import DFRobot_Epansion_Board_Digital_RGB_LED as RGB_LED
